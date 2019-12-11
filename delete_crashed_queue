@@ -1,0 +1,11 @@
+#!/usr/bin/python3
+import subprocess
+import argparse
+
+parser = argparse.ArgumentParser(description='delete broken queue')
+parser.add_argument('queue', type=str, help='which queue to delete')
+args = parser.parse_args()
+
+queue = args.queue
+
+subprocess.run("rabbitmqctl eval '{ok, Q} = rabbit_amqqueue:lookup(rabbit_misc:r(<<\"/\">>, queue, <<\"" + queue + "\">>)), rabbit_amqqueue:delete_crashed(Q).'", shell=True, check=True)
